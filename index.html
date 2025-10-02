@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DX Criteria クイズ（CI/CD）</title>
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --ok: #0a7f2e;
+      --ng: #ad1f2f;
+      --border: #e5e5e5;
+      --accent: #246bfe;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"; }
+    .container { max-width: 880px; margin: 32px auto; padding: 0 16px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    }
+    h1 { font-size: 1.4rem; margin: 0 0 8px; }
+    h2 { font-size: 1.1rem; margin: 24px 0 8px; }
+    p.lead { color: var(--muted); margin: 0 0 16px; }
+    .problem { font-size: 1.05rem; margin: 8px 0 16px; }
+    .choices { display: grid; gap: 12px; margin: 12px 0 8px; }
+    label.choice {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s ease, box-shadow .15s ease;
+      background: #fff;
+    }
+    label.choice:hover { border-color: var(--accent); box-shadow: 0 3px 12px rgba(36,107,254,.06); }
+    .choice.correct { border-color: var(--ok); }
+    .choice.incorrect { border-color: var(--ng); }
+    .explain {
+      display: none;
+      margin: 8px 0 0 28px;
+      color: var(--muted);
+      font-size: .95rem;
+      border-left: 3px solid var(--border);
+      padding-left: 12px;
+    }
+    .explain.show { display: block; }
+    .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    button {
+      appearance: none;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      font-size: .95rem;
+      cursor: pointer;
+      background: #fff;
+      transition: transform .02s ease, box-shadow .15s ease, border-color .15s ease;
+    }
+    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    button:active { transform: translateY(1px); }
+    .result {
+      margin-top: 12px;
+      font-weight: 600;
+    }
+    .result.ok { color: var(--ok); }
+    .result.ng { color: var(--ng); }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    .kbd {
+      display: inline-block; padding: 2px 6px; border: 1px solid var(--border);
+      border-bottom-width: 3px; border-radius: 6px; background: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: .85em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card" role="group" aria-labelledby="quiz-title">
+      <h1 id="quiz-title">DX Criteria クイズ（CI/CD）</h1>
+      <p class="lead">形式：単一選択｜難易度：実務者向け</p>
+
+      <div class="problem" id="problem">
+        DX Criteria における「CI/CD」の観点で、解説文の趣旨として最も適切なものはどれか。
+      </div>
+
+      <form id="quiz" class="choices" aria-describedby="helper">
+        <label class="choice" id="opt1">
+          <input type="radio" name="a" value="1" aria-labelledby="opt1-text" />
+          <div id="opt1-text">1. CI/CD はコードレビューを自動化する仕組みであり、品質保証部門の関与を不要にすることを目的としている。</div>
+        </label>
+        <div class="explain" id="exp1">コードレビューの補助は可能でも、CI/CD の本質は「自動化された統合〜デリバリー」。品質保証を不要にする趣旨ではない。</div>
+
+        <label class="choice" id="opt2">
+          <input type="radio" name="a" value="2" aria-labelledby="opt2-text" />
+          <div id="opt2-text">2. CI/CD は継続的インテグレーションと継続的デリバリー/デプロイメントを通じて、変更を小さく頻繁に本番へ届け、リードタイム短縮とリスク低減を図る。</div>
+        </label>
+        <div class="explain" id="exp2">（正解）CI は頻繁統合＋自動テスト、CD は小さな変更を素早く安全に本番へ。DX Criteria の趣旨と一致。</div>
+
+        <label class="choice" id="opt3">
+          <input type="radio" name="a" value="3" aria-labelledby="opt3-text" />
+          <div id="opt3-text">3. CI/CD は開発環境の構築効率化のための仕組みであり、本番リリースには関与しない。</div>
+        </label>
+        <div class="explain" id="exp3">副次的に開発効率は上がるが、本番リリース（継続的デリバリー/デプロイ）を含むエンドツーエンドの自動化が本質。</div>
+
+        <label class="choice" id="opt4">
+          <input type="radio" name="a" value="4" aria-labelledby="opt4-text" />
+          <div id="opt4-text">4. CI/CD はアジャイルにのみ必須のプラクティスで、ウォーターフォールでは利用できない。</div>
+        </label>
+        <div class="explain" id="exp4">アジャイルでの適合性は高いが、プロセスに依存せず導入可能。ウォーターフォールでも活用できる。</div>
+      </form>
+
+      <div id="helper" style="display:none">選択肢を 1 つ選んでください。</div>
+
+      <div class="actions">
+        <button class="primary" id="checkBtn" type="button" aria-controls="result">答え合わせ（Enter）</button>
+        <button id="showAllBtn" type="button">解説をすべて表示</button>
+        <button id="resetBtn" type="button">やり直し（R）</button>
+      </div>
+      <div class="result" id="result" aria-live="polite" role="status"></div>
+
+      <footer>
+        ヒント：選択して <span class="kbd">Enter</span> で答え合わせ、<span class="kbd">R</span> でやり直し。<br />
+        本クイズは DX Criteria の解説文の趣旨確認用に設計されています。
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const correctValue = "2";
+      const form = document.getElementById("quiz");
+      const result = document.getElementById("result");
+      const checkBtn = document.getElementById("checkBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const showAllBtn = document.getElementById("showAllBtn");
+
+      function getSelected() {
+        const fd = new FormData(form);
+        return fd.get("a");
+      }
+
+      function clearMarks() {
+        [...document.querySelectorAll(".choice")].forEach(el => {
+          el.classList.remove("correct","incorrect");
+        });
+      }
+
+      function hideExplanations() {
+        [...document.querySelectorAll(".explain")].forEach(el => el.classList.remove("show"));
+      }
+
+      function showAllExplanations() {
+        [...document.querySelectorAll(".explain")].forEach(el => el.classList.add("show"));
+      }
+
+      function checkAnswer() {
+        const v = getSelected();
+        clearMarks();
+        hideExplanations();
+        if (!v) {
+          result.textContent = "選択肢を 1 つ選んでください。";
+          result.className = "result ng";
+          return;
+        }
+        // Mark selected
+        const selectedLabel = document.querySelector('label.choice input[value="' + v + '"]').closest("label.choice");
+        if (v === correctValue) {
+          selectedLabel.classList.add("correct");
+          result.textContent = "正解！小さく頻繁な本番反映でリードタイム短縮＆リスク低減。";
+          result.className = "result ok";
+        } else {
+          selectedLabel.classList.add("incorrect");
+          result.textContent = "不正解。解説を確認しよう。";
+          result.className = "result ng";
+        }
+        // Always show explanations after check
+        showAllExplanations();
+        // Also outline the correct option
+        document.querySelector('label.choice input[value="' + correctValue + '"]').closest("label.choice").classList.add("correct");
+      }
+
+      function resetQuiz() {
+        form.reset();
+        clearMarks();
+        hideExplanations();
+        result.textContent = "";
+        result.className = "result";
+      }
+
+      checkBtn.addEventListener("click", checkAnswer);
+      resetBtn.addEventListener("click", resetQuiz);
+      showAllBtn.addEventListener("click", showAllExplanations);
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          checkAnswer();
+        } else if (e.key.toLowerCase() === "r") {
+          resetQuiz();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
